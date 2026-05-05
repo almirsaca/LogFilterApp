@@ -351,6 +351,38 @@ public partial class MainWindow : Window
         System.Media.SystemSounds.Beep.Play();
     }
 
+    private void CopyOutputSelected_Executed(object sender, ExecutedRoutedEventArgs e) => CopyOutputSelectedToClipboard();
+    private void MenuCopyOutputSelected_Click(object sender, RoutedEventArgs e) => CopyOutputSelectedToClipboard();
+    private void MenuCopyOutputAll_Click(object sender, RoutedEventArgs e) => CopyOutputAllToClipboard();
+    private void MenuSelectAllOutput_Click(object sender, RoutedEventArgs e) => LstOutput.SelectAll();
+
+    private void CopyOutputSelectedToClipboard()
+    {
+        var lines = LstOutput.SelectedItems.OfType<LogEntry>().Select(x => x.FullText);
+        var text = string.Join(Environment.NewLine, lines);
+        if (!string.IsNullOrEmpty(text)) Clipboard.SetText(text);
+    }
+
+    private void CopyOutputAllToClipboard()
+    {
+        var lines = LstOutput.Items.OfType<LogEntry>().Select(x => x.FullText);
+        var text = string.Join(Environment.NewLine, lines);
+        if (!string.IsNullOrEmpty(text)) Clipboard.SetText(text);
+    }
+
+    private void BtnOutputToInput_Click(object sender, RoutedEventArgs e)
+    {
+        if (_isBusy) return;
+
+        var text = string.Join(
+            Environment.NewLine,
+            LstOutput.Items.OfType<LogEntry>().Select(x => x.FullText));
+
+        TxtInputLog.Text = text;
+        LstOutput.ItemsSource = null;
+        GrpOutput.Header = "Output";
+    }
+
     private void BtnClearDates_Click(object sender, RoutedEventArgs e)
     {
         DpStartDate.SelectedDate = null;

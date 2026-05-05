@@ -107,6 +107,10 @@
         <GroupBox x:Name="GrpOutput" Header="Output" Grid.Row="3" Padding="4">
             <DockPanel>
                 <DockPanel DockPanel.Dock="Top" Margin="0,0,0,4">
+                    <Button DockPanel.Dock="Left" Content="Output &#x2192; Input"
+                            ToolTip="Limpa o input, move o output para o input e limpa o output"
+                            Padding="8,2" Margin="0,0,8,0"
+                            Click="BtnOutputToInput_Click"/>
                     <TextBlock VerticalAlignment="Center" Margin="0,0,4,0" Text="Buscar:"/>
                     <Button DockPanel.Dock="Right" Content="&#x2193;"
                             ToolTip="Proxima ocorrencia (Enter)"
@@ -126,7 +130,25 @@
                       VirtualizingPanel.IsVirtualizing="True"
                       VirtualizingPanel.VirtualizationMode="Recycling"
                       VirtualizingPanel.ScrollUnit="Pixel"
+                      SelectionMode="Extended"
                       BorderThickness="0">
+                <ListView.CommandBindings>
+                    <CommandBinding Command="ApplicationCommands.Copy"
+                                    Executed="CopyOutputSelected_Executed"/>
+                </ListView.CommandBindings>
+                <ListView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Copiar selecionado(s)"
+                                  InputGestureText="Ctrl+C"
+                                  Click="MenuCopyOutputSelected_Click"/>
+                        <MenuItem Header="Copiar tudo"
+                                  Click="MenuCopyOutputAll_Click"/>
+                        <Separator/>
+                        <MenuItem Header="Selecionar tudo"
+                                  InputGestureText="Ctrl+A"
+                                  Click="MenuSelectAllOutput_Click"/>
+                    </ContextMenu>
+                </ListView.ContextMenu>
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>

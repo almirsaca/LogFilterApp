@@ -1,5 +1,7 @@
-﻿# 1. Define o caminho de saída
-$destinationPath = "D:\Users\almir.martinelli\Documents\_centralizados\AplicativosHelpers\LogFilterApp"
+﻿param(
+    [Parameter(Mandatory = $true)]
+    [string]$destinationPath
+)
 
 # 2. Garante que o script saiba onde está e suba para a raiz do projeto
 $scriptPath = Split-Path -Parent $MyInvocation.MyCommand.Definition
