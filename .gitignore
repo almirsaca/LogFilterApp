@@ -1,0 +1,56 @@
+# Build outputs
+bin/
+obj/
+out/
+publish/
+TestResults/
+[Cc]overage*/
+
+# Visual Studio / Rider / VS Code
+.vs/
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+# Rider
+*.sln.iml
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+project.lock.json
+*.nuget.props
+*.nuget.targets
+
+# .NET
+*.cache
+*.pdb
+*.dll.config
+*.exe.config
+*.swp
+*.swo
+*.bak
+*.tmp
+
+# WPF / generated XAML code-behind
+*.g.cs
+*.g.i.cs
+*.baml
+
+# OS
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+
+# Logs
+*.log
+
+# Local app data of the app itself (in case run from repo)
+path_history.json

@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="LogFilterApp.Tests/LogFilterApp.Tests.csproj" />
+  <Project Path="LogFilterApp/LogFilterApp.csproj" />
+</Solution>

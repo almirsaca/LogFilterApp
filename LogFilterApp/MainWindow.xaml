@@ -1,0 +1,176 @@
+<Window x:Class="LogFilterApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Log Filter" Height="700" Width="950"
+        MinHeight="480" MinWidth="720">
+
+    <Grid Margin="8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="8"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Controles superiores -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,8">
+
+            <!-- Linha 1: Busca -->
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                <Label VerticalAlignment="Center" Margin="0,0,8,0">Padrao de busca:</Label>
+                <TextBox x:Name="TxtPattern" Width="300" VerticalAlignment="Center"/>
+            </StackPanel>
+
+            <!-- Linha 2: Timestamp preset (auto-detectado) -->
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                <Label VerticalAlignment="Center" Margin="0,0,8,0">Timestamp:</Label>
+                <ComboBox x:Name="CmbTimestampPresets"
+                          Width="420"
+                          VerticalAlignment="Center"
+                          SelectionChanged="CmbTimestampPresets_SelectionChanged"/>
+                <TextBlock x:Name="TxtDetectedStatus"
+                           VerticalAlignment="Center"
+                           Margin="8,0,0,0"
+                           FontStyle="Italic"
+                           Foreground="Gray"/>
+            </StackPanel>
+
+            <!-- Linha 3: Filtro de data/hora -->
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                <Label VerticalAlignment="Center" Margin="0,0,4,0">De:</Label>
+                <DatePicker x:Name="DpStartDate" Width="130" VerticalAlignment="Center"/>
+                <TextBox x:Name="TxtStartTime" Width="70" VerticalAlignment="Center" Margin="4,0,0,0"
+                         Text="00:00:00" ToolTip="HH:mm:ss"
+                         TextChanged="TxtTime_TextChanged"/>
+
+                <Label VerticalAlignment="Center" Margin="16,0,4,0">Ate:</Label>
+                <DatePicker x:Name="DpEndDate" Width="130" VerticalAlignment="Center"/>
+                <TextBox x:Name="TxtEndTime" Width="70" VerticalAlignment="Center" Margin="4,0,0,0"
+                         Text="23:59:59" ToolTip="HH:mm:ss"
+                         TextChanged="TxtTime_TextChanged"/>
+
+                <Button x:Name="BtnClearDates" Content="Limpar datas"
+                        Click="BtnClearDates_Click"
+                        Padding="8,4" Margin="12,0,0,0"
+                        VerticalAlignment="Center"/>
+
+                <Button x:Name="BtnFilter" Content="Filtrar"
+                        Click="BtnFilter_Click"
+                        Padding="8,4" Margin="8,0,0,0"
+                        VerticalAlignment="Center"
+                        IsEnabled="False"/>
+            </StackPanel>
+
+        </StackPanel>
+
+        <!-- INPUT -->
+        <GroupBox Header="Input Log" Grid.Row="1" Padding="4">
+            <DockPanel>
+                <ProgressBar x:Name="PbFiltering"
+                             DockPanel.Dock="Top"
+                             Height="4"
+                             Margin="0,0,0,4"
+                             IsIndeterminate="True"
+                             Visibility="Collapsed"/>
+                <DockPanel DockPanel.Dock="Top" Margin="0,0,0,4">
+                    <TextBlock VerticalAlignment="Center" Margin="0,0,4,0" Text="Buscar:"/>
+                    <Button DockPanel.Dock="Right" Content="&#x2193;"
+                            ToolTip="Proxima ocorrencia (Enter)"
+                            Padding="8,2" Margin="2,0,0,0"
+                            Click="BtnFindNextInput_Click"/>
+                    <Button DockPanel.Dock="Right" Content="&#x2191;"
+                            ToolTip="Ocorrencia anterior (Shift+Enter)"
+                            Padding="8,2" Margin="2,0,0,0"
+                            Click="BtnFindPrevInput_Click"/>
+                    <TextBox x:Name="TxtFindInput"
+                             KeyDown="TxtFindInput_KeyDown"/>
+                </DockPanel>
+                <TextBox x:Name="TxtInputLog"
+                         AllowDrop="True"
+                         PreviewDragOver="TxtInputLog_PreviewDragOver"
+                         PreviewDrop="TxtInputLog_PreviewDrop"
+                         AcceptsReturn="True"
+                         VerticalScrollBarVisibility="Auto"
+                         HorizontalScrollBarVisibility="Auto"
+                         TextWrapping="NoWrap"
+                         FontFamily="Consolas, Courier New"
+                         TextChanged="TxtInputLog_TextChanged"/>
+            </DockPanel>
+        </GroupBox>
+
+        <!-- Splitter -->
+        <GridSplitter Grid.Row="2" Height="8" HorizontalAlignment="Stretch"
+                      VerticalAlignment="Center" ShowsPreview="True"/>
+
+        <!-- OUTPUT -->
+        <GroupBox x:Name="GrpOutput" Header="Output" Grid.Row="3" Padding="4">
+            <DockPanel>
+                <DockPanel DockPanel.Dock="Top" Margin="0,0,0,4">
+                    <TextBlock VerticalAlignment="Center" Margin="0,0,4,0" Text="Buscar:"/>
+                    <Button DockPanel.Dock="Right" Content="&#x2193;"
+                            ToolTip="Proxima ocorrencia (Enter)"
+                            Padding="8,2" Margin="2,0,0,0"
+                            Click="BtnFindNextOutput_Click"/>
+                    <Button DockPanel.Dock="Right" Content="&#x2191;"
+                            ToolTip="Ocorrencia anterior (Shift+Enter)"
+                            Padding="8,2" Margin="2,0,0,0"
+                            Click="BtnFindPrevOutput_Click"/>
+                    <TextBox x:Name="TxtFindOutput"
+                             KeyDown="TxtFindOutput_KeyDown"/>
+                </DockPanel>
+                <ListView x:Name="LstOutput"
+                      FontFamily="Consolas, Courier New"
+                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                      ScrollViewer.VerticalScrollBarVisibility="Auto"
+                      VirtualizingPanel.IsVirtualizing="True"
+                      VirtualizingPanel.VirtualizationMode="Recycling"
+                      VirtualizingPanel.ScrollUnit="Pixel"
+                      BorderThickness="0">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <Setter Property="Padding" Value="2,0"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding FullText}"
+                                   FontFamily="Consolas, Courier New"
+                                   TextWrapping="NoWrap"/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                </ListView>
+            </DockPanel>
+        </GroupBox>
+
+        <!-- Botoes e historico -->
+        <DockPanel Grid.Row="4" Margin="0,8,0,0">
+
+            <!-- Historico de diretorios (esquerda) -->
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                <Label VerticalAlignment="Center" Margin="0,0,4,0">Diretorio:</Label>
+                <ComboBox x:Name="CmbPathHistory"
+                          Width="350"
+                          VerticalAlignment="Center"
+                          ToolTip="Selecione um diretorio favorito para abrir o dialog nele"/>
+                <Button x:Name="BtnRemovePath" Content="&#x2715;"
+                        Click="BtnRemovePath_Click"
+                        Padding="6,4" Margin="4,0,0,0"
+                        ToolTip="Remover diretorio selecionado do historico"
+                        VerticalAlignment="Center"/>
+            </StackPanel>
+
+            <!-- Botoes de acao (direita) -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="BtnLoadFile" Content="Carregar arquivo"
+                        Click="BtnLoadFile_Click" Padding="8,4" Margin="0,0,8,0"/>
+                <Button x:Name="BtnReloadFiles" Content="Atualizar arquivos"
+                        Click="BtnReloadFiles_Click" Padding="8,4"
+                        IsEnabled="False"
+                        ToolTip="Re-le do disco os arquivos atualmente carregados"/>
+            </StackPanel>
+
+        </DockPanel>
+    </Grid>
+</Window>
