@@ -24,3 +24,5 @@ if ($LASTEXITCODE -eq 0) {
 
 Write-Host "`nPressione qualquer tecla para sair..."
 $null = [Console]::ReadKey()
+
+# "C:\Users\almir.martinelli\Documents\_centralizados\AplicativosHelpers\LogFilterApp"
