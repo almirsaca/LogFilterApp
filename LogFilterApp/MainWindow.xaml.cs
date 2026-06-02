@@ -592,7 +592,7 @@ public partial class MainWindow : Window
 
         foreach (var fileName in files)
         {
-            var content = await File.ReadAllTextAsync(fileName);
+            var content = await SharedFileReader.ReadAllTextAsync(fileName);
             sb.AppendLine(content);
             sb.AppendLine();
 
@@ -622,7 +622,8 @@ public partial class MainWindow : Window
             {
                 try
                 {
-                    using var reader = new StreamReader(file);
+                    using var stream = SharedFileReader.OpenForSharedReading(file);
+                    using var reader = new StreamReader(stream);
                     return LogParser.DetectPreset(reader);
                 }
                 catch

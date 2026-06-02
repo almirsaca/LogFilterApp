@@ -87,4 +87,4 @@ Itens pendentes em [LogFilterApp/docs/TODO.md](LogFilterApp/docs/TODO.md). Desta
 
 ## Versão
 
-1.2.0
+1.4.0
