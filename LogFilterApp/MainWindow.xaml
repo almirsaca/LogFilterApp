@@ -20,6 +20,11 @@
             <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
                 <Label VerticalAlignment="Center" Margin="0,0,8,0">Padrao de busca:</Label>
                 <TextBox x:Name="TxtPattern" Width="300" VerticalAlignment="Center"/>
+                <Button x:Name="BtnFilter" Content="Filtrar"
+                        Click="BtnFilter_Click"
+                        Padding="8,4" Margin="8,0,0,0"
+                        VerticalAlignment="Center"
+                        IsEnabled="False"/>
             </StackPanel>
 
             <!-- Linha 2: Timestamp preset (auto-detectado) -->
@@ -54,12 +59,6 @@
                         Click="BtnClearDates_Click"
                         Padding="8,4" Margin="12,0,0,0"
                         VerticalAlignment="Center"/>
-
-                <Button x:Name="BtnFilter" Content="Filtrar"
-                        Click="BtnFilter_Click"
-                        Padding="8,4" Margin="8,0,0,0"
-                        VerticalAlignment="Center"
-                        IsEnabled="False"/>
             </StackPanel>
 
         </StackPanel>
